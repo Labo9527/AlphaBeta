@@ -7,11 +7,11 @@
 
 可将如图
 
-![image-20191224212427800](/Users/yang/Library/Application Support/typora-user-images/image-20191224212427800.png)
+![image-20191224212427800](./asset/image-20191224212427800.png)
 
 剪枝为
 
-![image-20191224212553364](/Users/yang/Library/Application Support/typora-user-images/image-20191224212553364.png)
+![image-20191224212553364](./asset/image-20191224212553364.png)
 
 
 
@@ -19,11 +19,11 @@
 
 程序按照DFS顺序依次询问每个节点，如下
 
-![image-20191224212731551](/Users/yang/Library/Application Support/typora-user-images/image-20191224212731551.png)
+![image-20191224212731551](./asset/image-20191224212731551.png)
 
 若节点为非叶子节点，则询问其子节点
 
-![image-20191224212806156](/Users/yang/Library/Application Support/typora-user-images/image-20191224212806156.png)
+![image-20191224212806156](./asset/image-20191224212806156.png)
 
 上图代表第一个节点有两个非叶子节点
 
@@ -31,7 +31,7 @@
 
 输入完毕即可开始剪枝，若单纯只想看多叉树可以调用
 
-![image-20191224212905828](/Users/yang/Library/Application Support/typora-user-images/image-20191224212905828.png)
+![image-20191224212905828](./asset/image-20191224212905828.png)
 
 上面这个函数，并把下面剪枝函数注释掉
 
