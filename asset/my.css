@@ -1,0 +1,31 @@
+#test1{
+    width: 100px;
+    height: 50px;
+}
+
+body{
+    margin: 0;
+    padding: 0;
+    height: 800px;
+}
+
+#test2{
+    width: 100px;
+    height: 50px;
+}
+
+#button_container{
+    height: 50px;
+}
+
+#mycanvas{
+    width: 700px;
+    height: 700px;
+    border:1px dashed #000;
+}
+
+
+
+#root{
+    width: 100px;
+}
