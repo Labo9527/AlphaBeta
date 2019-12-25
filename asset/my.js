@@ -13,8 +13,8 @@ window.onload = function(){
     ctx.fill();
     bigcanvas.addEventListener("mousedown", onDown);
 
-    root.x = 10;
-    root.y = 10;
+    root.x = 100;
+    root.y = 100;
     nodes[0] = root;
     console.log(nodes[0]);
 
@@ -40,20 +40,21 @@ function abs(a){
 function onDown(e){
     var mx = e.clientX;
     var my = e.clientY;
-    var ctx = bigcanvas.getContext("2d");
-    ctx.beginPath();
-    ctx.arc(mx, my,5,0,2*Math.PI);
-    ctx.fillStyle="blue";
-    ctx.fill();
+    // var ctx = bigcanvas.getContext("2d");
+    // ctx.beginPath();
+    // ctx.arc(mx, my,5,0,2*Math.PI);
+    // ctx.fillStyle="blue";
+    // ctx.fill();
     console.log(mx, my);
     for(let i=0;i<nodes.length;i++){
         console.log(nodes[i]);
-        if(abs(mx-nodes[i].x)<1&&abs(my-nodes[i].y)<1){
+        if(abs(mx-nodes[i].x)<5&&abs(my-nodes[i].y)<5){
+            console.log("clicked!")
             nodes[i].picked=1;
             var ctx = bigcanvas.getContext("2d");
             ctx.beginPath();
-            ctx.arc(10,10,2,0,2*Math.PI);
-            cxt.strokeStyle="yellow";
+            ctx.arc(nodes[i].x, nodes[i].y , 5,0,2*Math.PI);
+            ctx.strokeStyle="yellow";
             ctx.stroke();
         }
     }
