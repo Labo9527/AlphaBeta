@@ -9,7 +9,7 @@ window.onload = function(){
     bigcanvas.width = 700;
     var ctx = bigcanvas.getContext("2d");
     ctx.beginPath();
-    ctx.arc(350,50,5,0,2*Math.PI);
+    ctx.arc(250,50,5,0,2*Math.PI);
     ctx.fillStyle="blue";
     ctx.fill();
     bigcanvas.addEventListener("mousedown", onDown);
@@ -76,6 +76,34 @@ window.onload = function(){
         }
         console.log(tower);
     });
+
+    $("button#test3").click(function(){
+    //    console.log("test3"); 
+    for(let i=0;i<nodes.length;i++){
+            if(nodes[i].picked==0){
+                if(i==nodes.length-1){
+                    return;
+                }
+                continue;
+            }
+            nodes[i].par.children.splice(getIndex(nodes[i].par.children,nodes[i]), 1);
+            nodes[i].par = 0;
+            DeleteDFS(nodes[i]);
+            break;
+        }
+        ReDraw(root, 0);
+    });
+}
+
+function DeleteDFS(root){
+    for(let i=0;i<nodes.length;i++){
+        if(root != nodes[i])
+            continue;
+        nodes.splice(i ,1);
+        for(let j=0;j<root.children.length;j++){
+            DeleteDFS(root.children[j]);
+        }
+    }
 }
 
 function abs(a){
@@ -186,7 +214,12 @@ function ReDraw(node, cnt){
                     tower[i][j].x+=100;
                 }
             }
+            var length=tower[i][tower[i].length-1].x-tower[i][0].x;
+            for(let j=0;j<tower[i].length;j++){
+                tower[i][j].x = tower[i][0].x + j * (length/tower[i].length);
+            }
         }
+
 
 
         var width = document.getElementById("bigcanvas").width;
