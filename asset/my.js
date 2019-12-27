@@ -79,12 +79,15 @@ window.onload = function(){
 
     $("button#test3").click(function(){
     //    console.log("test3"); 
-    for(let i=0;i<nodes.length;i++){
+        for(let i=0;i<nodes.length;i++){
             if(nodes[i].picked==0){
                 if(i==nodes.length-1){
                     return;
                 }
                 continue;
+            }
+            if(nodes[i] == root){
+                return;
             }
             nodes[i].par.children.splice(getIndex(nodes[i].par.children,nodes[i]), 1);
             nodes[i].par = 0;
@@ -93,6 +96,58 @@ window.onload = function(){
         }
         ReDraw(root, 0);
     });
+
+    $("button#test4").click(function(){
+        if(noassign(root) == false){
+            alert("树尚未完成");
+        } else{
+            AlphaBeta(root);
+            alert("剪枝完成");
+        }
+    });
+
+}
+
+function AlphaBeta(mynode){
+    if(mynode.type=="leaf")
+        return mynode.value;
+    if(mynode.type=="max"){
+        for(let i=0;i<mynode.children.length;i++){
+            mynode.alpha = max(mynode.alpha, AlphaBeta(mynode.children[i]));
+            if(mynode.beta<=mynode.alpha){
+                for(let j=i+1;j<mynode.children.length;j++){
+                    DeleteDFS(mynode.children[j]);
+                }
+                break;
+            }
+        }
+        return mynode.alpha;
+    }
+    if(mynode.type=="min"){
+        for(let i=0;i<mynode.children.length;i++){
+            mynode.beta = min(mynode.beta, AlphaBeta(mynode.children[i]));
+            if(mynode.beta<=mynode.alpha){
+                for(let j=i+1;j<mynode.children.length;j++){
+                    DeleteDFS(mynode.children[j]);
+                }
+                break;
+            }
+        }
+        return mynode.beta;
+    }
+}
+
+function noassign(mynode){
+    if(mynode.type != "leaf" && mynode.children.length == 0){
+        return false;
+    }
+    if(mynode.type == "max" || mynode.type == "min"){
+        for(let i=0;i<mynode.children.length;i++){
+            if(noassign(mynode.children[i]) == false)
+                return false;
+        }
+    }
+    return true;
 }
 
 function DeleteDFS(root){
@@ -141,6 +196,13 @@ function max(a,b){
     return b;
 }
 
+function min(a,b){
+    if(a<=b){
+        return a;
+    }
+    return b;
+}
+
 function getDepth(mynode, cnt) {
     if(cnt == 0){
         tower.splice(0, tower.length);
@@ -181,6 +243,19 @@ function GetCrast(x, y){
     return count;
 }
 
+function GetX(node, nodearray){
+    var length=nodearray[nodearray.length-1].x-nodearray[0].x;
+    var averagex = 0;
+    for(let j=0;j<nodearray.length;j++){
+        averagex = averagex + nodearray[j].x;
+    }
+    averagex = averagex / nodearray.length;
+    for(let j=0;j<nodearray.length;j++){
+        nodearray[j].x = averagex + 25*(j - Math.floor(nodearray.length/2));
+    }
+    return node.x;
+}
+
 function ReDraw(node, cnt){
     if(cnt == 0){
         for(let i=0;i<nodes.length;i++){
@@ -210,14 +285,16 @@ function ReDraw(node, cnt){
             for(let j=tower[i].length-1;j>=0;j--){
                 if(tower[i][j].children.length==0)
                     continue;
-                while(tower[i][j].children[tower[i][j].children.length-1].x-100>tower[i][j].x){
-                    tower[i][j].x+=100;
+                while(tower[i][j].children[tower[i][j].children.length-1].x-100>GetX(tower[i][j],tower[i])){
+                    console.log("got it");
+                    tower[i][tower[i].length-1].x+=100;
                 }
             }
-            var length=tower[i][tower[i].length-1].x-tower[i][0].x;
-            for(let j=0;j<tower[i].length;j++){
-                tower[i][j].x = tower[i][0].x + j * (length/tower[i].length);
-            }
+            GetX(tower[i][0],tower);
+            // var length=tower[i][tower[i].length-1].x-tower[i][0].x;
+            // for(let j=0;j<tower[i].length;j++){
+            //     tower[i][j].x = tower[i][0].x + j * (length/tower[i].length);
+            // }
         }
 
 
@@ -234,8 +311,10 @@ function ReDraw(node, cnt){
                 ctx.fillStyle="blue";
             else if(nodes[i].type=="min")
                 ctx.fillStyle="red";
-            else if(nodes[i].type=="leaf")
+            else if(nodes[i].type=="leaf"){
                 ctx.fillStyle="green";
+                ctx.fillText(nodes[i].value, nodes[i].x, nodes[i].y+10);
+            }
             ctx.fill();
             ctx.strokeStyle = "black";
             for(let j=0;j<nodes[i].children.length;j++){
@@ -257,4 +336,6 @@ function node(){
     this.par= 0;
     this.picked=0;
     this.value=0;
+    this.alpha=-1000000;
+    this.beta=1000000;
 }
